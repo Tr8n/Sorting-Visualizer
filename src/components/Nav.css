@@ -1,0 +1,91 @@
+
+
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Dark Mode and Light Mode */
+  .dark-mode {
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Text color for dark mode */
+  }
+  
+  .light-mode {
+    background-color: #fff; /* Light background color */
+    color: #333; /* Text color for light mode */
+  }
+  
+  /* Nav Styles */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  nav img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  /* Navigation Buttons */
+  .nav-btns {
+    display: flex;
+    gap: 20px;
+    list-style-type: none;
+  }
+  
+  .nav-btns li {
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-btns li:hover {
+    color: #ff4d4d;
+  }
+  
+  /* Search Bar */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .search-bar input[type="search"] {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    outline: none;
+  }
+  
+  .search-bar img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  /* Toggle Button */
+.toggle-button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    border: none;
+    border-radius: 25px; /* Adjusted for a more curved button */
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .toggle-button:hover {
+    background-color: #ff1a1a;
+  }
+  

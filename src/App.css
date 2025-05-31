@@ -1,0 +1,262 @@
+/* === Base Theme === */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #121212; /* Netflix-like dark */
+  color: #ffffff;
+}
+
+/* === Layout Wrapper === */
+main, .page, .container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* === Headings === */
+h1, h2, h3 {
+  color: #e50914;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* === Navigation Bar === */
+nav {
+  background-color: #000000;
+  color: white;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+nav h1 {
+  margin: 0;
+  font-size: 24px;
+  display: inline;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+nav ul li {
+  display: inline;
+  margin-left: 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #e50914;
+}
+
+/* === Control Buttons === */
+.controls, .control-panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+button {
+  padding: 10px 18px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+button:hover {
+  background-color: #b00610;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* === Range Slider === */
+input[type="range"] {
+  width: 200px;
+  accent-color: #e50914;
+}
+
+/* === Visualization Wrapper === */
+.visualization-wrapper {
+  position: relative;
+  border: 2px solid #e50914;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 30px auto;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+  max-width: 1000px;
+}
+
+/* === Array Container === */
+.array-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 300px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* === Array Bars === */
+.array-bar {
+  width: 12px;
+  margin: 0 2px;
+  background: linear-gradient(to top, #e50914, #b00610);
+  transition: height 0.3s ease;
+  border-radius: 3px 3px 0 0;
+}
+
+/* === Info Section === */
+.description, .info, .algorithm-info {
+  background-color: #181818;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(255,255,255,0.05);
+  margin-top: 30px;
+  color: #eee;
+}
+
+.description h3, .info h3 {
+  color: #fff;
+}
+
+/* === Table Styling === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #222;
+  color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+}
+
+th {
+  background-color: #e50914;
+  color: white;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #444;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #2e2e2e;
+}
+
+tr:hover {
+  background-color: #3a3a3a;
+  transition: 0.3s;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .array-container {
+    height: 200px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  input[type="range"] {
+    width: 150px;
+  }
+}
+/* === Code Section Styling === */
+.code-section {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #181818;
+  border: 1px solid #e50914;
+  border-radius: 10px;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.code-section h2 {
+  color: #e50914;
+  margin-bottom: 10px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.algorithm-description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #dddddd;
+  text-align: center;
+}
+
+.code-section select {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 8px 12px;
+  background-color: #1f1f1f;
+  color: white;
+  border: 1px solid #e50914;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.code-section select:focus {
+  outline: none;
+  box-shadow: 0 0 5px #e50914;
+}
+
+.code-box {
+  background-color: #1c1c1c;
+  color: #ffffff;
+  border: 1px solid #333;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  max-height: 400px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.code-box::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-box::-webkit-scrollbar-track {
+  background: #1c1c1c;
+}
+
+.code-box::-webkit-scrollbar-thumb {
+  background-color: #e50914;
+  border-radius: 4px;
+}

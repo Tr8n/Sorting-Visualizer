@@ -1,0 +1,22 @@
+.array-container {
+    display: flex;
+    align-items: flex-end;
+    height: 500px;
+    margin: 20px auto;
+    width: 80%;
+  }
+  
+  .array-bar {
+    background-color: #61dafb;
+    margin: 0 1px;
+    width: 10px;
+  }
+  
+  .controls {
+    margin-top: 20px;
+  }
+  
+  .array-size-control {
+    margin: 10px 0;
+  }
+  
