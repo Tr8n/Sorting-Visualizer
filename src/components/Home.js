@@ -1,592 +1,330 @@
-import React from 'react';
-// import './Home.css'; // Ensure you create this CSS file
+import React, { useState } from 'react';
 
 const Home = () => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const algorithms = [
+    {
+      id: 'bubble',
+      name: 'Bubble Sort',
+      icon: '🫧',
+      category: 'simple',
+      description: 'A simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.',
+      timeComplexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)' },
+      spaceComplexity: 'O(1)',
+      stability: 'Stable',
+      inPlace: 'Yes',
+      advantages: ['Simple to understand', 'Good for small datasets', 'Detects if array is already sorted'],
+      disadvantages: ['Poor performance on large datasets', 'Many swaps required'],
+      useCases: ['Educational purposes', 'Small datasets', 'Nearly sorted arrays']
+    },
+    {
+      id: 'selection',
+      name: 'Selection Sort',
+      icon: '🎯',
+      category: 'simple',
+      description: 'Divides the input into a sorted and unsorted region, repeatedly selecting the smallest element from the unsorted region.',
+      timeComplexity: { best: 'O(n²)', average: 'O(n²)', worst: 'O(n²)' },
+      spaceComplexity: 'O(1)',
+      stability: 'Unstable',
+      inPlace: 'Yes',
+      advantages: ['Minimal memory usage', 'Good for small datasets', 'Fewer swaps than bubble sort'],
+      disadvantages: ['Poor performance on large datasets', 'Always O(n²) time complexity'],
+      useCases: ['Small datasets', 'Memory-constrained environments', 'When swap cost is high']
+    },
+    {
+      id: 'insertion',
+      name: 'Insertion Sort',
+      icon: '📝',
+      category: 'simple',
+      description: 'Builds the final sorted array one item at a time, by repeatedly inserting a new element into the sorted portion of the array.',
+      timeComplexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)' },
+      spaceComplexity: 'O(1)',
+      stability: 'Stable',
+      inPlace: 'Yes',
+      advantages: ['Simple implementation', 'Efficient for small data', 'Adaptive algorithm'],
+      disadvantages: ['Poor performance on large datasets', 'Many element shifts'],
+      useCases: ['Small datasets', 'Nearly sorted arrays', 'Online sorting']
+    },
+    {
+      id: 'shell',
+      name: 'Shell Sort',
+      icon: '🐚',
+      category: 'advanced',
+      description: 'An optimization of insertion sort that allows the exchange of items that are far apart, reducing the number of swaps required.',
+      timeComplexity: { best: 'O(n log n)', average: 'O(n^1.3)', worst: 'O(n²)' },
+      spaceComplexity: 'O(1)',
+      stability: 'Unstable',
+      inPlace: 'Yes',
+      advantages: ['Better than insertion sort', 'Adaptive algorithm', 'Good for medium-sized arrays'],
+      disadvantages: ['Complex gap sequence', 'Not as efficient as modern algorithms'],
+      useCases: ['Medium-sized datasets', 'When insertion sort is too slow']
+    },
+    {
+      id: 'merge',
+      name: 'Merge Sort',
+      icon: '🔀',
+      category: 'divide-conquer',
+      description: 'A divide-and-conquer algorithm that recursively divides the array into halves, sorts them, and then merges the sorted halves.',
+      timeComplexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n log n)' },
+      spaceComplexity: 'O(n)',
+      stability: 'Stable',
+      inPlace: 'No',
+      advantages: ['Consistent performance', 'Stable sort', 'Predictable time complexity'],
+      disadvantages: ['Requires extra space', 'Not in-place algorithm'],
+      useCases: ['Large datasets', 'When stability is required', 'External sorting']
+    },
+    {
+      id: 'quick',
+      name: 'Quick Sort',
+      icon: '⚡',
+      category: 'divide-conquer',
+      description: 'A highly efficient, comparison-based sorting algorithm that uses a divide-and-conquer strategy with a pivot element.',
+      timeComplexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n²)' },
+      spaceComplexity: 'O(log n)',
+      stability: 'Unstable',
+      inPlace: 'Yes',
+      advantages: ['Excellent average performance', 'In-place algorithm', 'Cache-friendly'],
+      disadvantages: ['Unstable sort', 'Poor performance on sorted arrays'],
+      useCases: ['General-purpose sorting', 'Large datasets', 'When average performance matters']
+    },
+    {
+      id: 'heap',
+      name: 'Heap Sort',
+      icon: '🌳',
+      category: 'advanced',
+      description: 'A comparison-based sorting algorithm that uses a binary heap data structure to sort elements.',
+      timeComplexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n log n)' },
+      spaceComplexity: 'O(1)',
+      stability: 'Unstable',
+      inPlace: 'Yes',
+      advantages: ['In-place algorithm', 'Consistent performance', 'No extra space needed'],
+      disadvantages: ['Unstable sort', 'Poor cache performance', 'Complex implementation'],
+      useCases: ['Memory-constrained environments', 'When guaranteed O(n log n) is needed']
+    },
+    {
+      id: 'counting',
+      name: 'Counting Sort',
+      icon: '🔢',
+      category: 'linear',
+      description: 'A non-comparison based sorting algorithm that counts the number of objects having distinct key values.',
+      timeComplexity: { best: 'O(n + k)', average: 'O(n + k)', worst: 'O(n + k)' },
+      spaceComplexity: 'O(k)',
+      stability: 'Stable',
+      inPlace: 'No',
+      advantages: ['Linear time complexity', 'Stable sort', 'Good for small range data'],
+      disadvantages: ['Requires extra space', 'Not suitable for large range data'],
+      useCases: ['Small range integers', 'When linear time is required', 'Radix sort subroutine']
+    },
+    {
+      id: 'radix',
+      name: 'Radix Sort',
+      icon: '📊',
+      category: 'linear',
+      description: 'A non-comparison based sorting algorithm that sorts data with integer keys by grouping keys by individual digits.',
+      timeComplexity: { best: 'O(d * (n + k))', average: 'O(d * (n + k))', worst: 'O(d * (n + k))' },
+      spaceComplexity: 'O(n + k)',
+      stability: 'Stable',
+      inPlace: 'No',
+      advantages: ['Linear time for fixed digits', 'Stable sort', 'Good for integers'],
+      disadvantages: ['Requires extra space', 'Only works with integers', 'Complex implementation'],
+      useCases: ['Integer sorting', 'When digit-based sorting is needed', 'Large integer datasets']
+    },
+    {
+      id: 'bucket',
+      name: 'Bucket Sort',
+      icon: '🪣',
+      category: 'linear',
+      description: 'A distribution sort algorithm that works by distributing the elements of an array into a number of buckets.',
+      timeComplexity: { best: 'O(n + k)', average: 'O(n + k)', worst: 'O(n²)' },
+      spaceComplexity: 'O(n + k)',
+      stability: 'Stable',
+      inPlace: 'No',
+      advantages: ['Linear time for uniform distribution', 'Stable sort', 'Good for floating-point numbers'],
+      disadvantages: ['Poor performance for non-uniform data', 'Requires extra space'],
+      useCases: ['Uniformly distributed data', 'Floating-point sorting', 'When linear time is possible']
+    },
+    {
+      id: 'tim',
+      name: 'Tim Sort',
+      icon: '⏰',
+      category: 'hybrid',
+      description: 'A hybrid sorting algorithm derived from merge sort and insertion sort, designed to perform well on real-world data.',
+      timeComplexity: { best: 'O(n)', average: 'O(n log n)', worst: 'O(n log n)' },
+      spaceComplexity: 'O(n)',
+      stability: 'Stable',
+      inPlace: 'No',
+      advantages: ['Adaptive algorithm', 'Stable sort', 'Optimized for real-world data'],
+      disadvantages: ['Complex implementation', 'Requires extra space'],
+      useCases: ['General-purpose sorting', 'Real-world applications', 'When stability is required']
+    }
+  ];
+
+  const categories = [
+    { id: 'all', name: 'All Algorithms', icon: '🎯' },
+    { id: 'simple', name: 'Simple Sorts', icon: '📝' },
+    { id: 'divide-conquer', name: 'Divide & Conquer', icon: '🔀' },
+    { id: 'advanced', name: 'Advanced Sorts', icon: '⚡' },
+    { id: 'linear', name: 'Linear Time', icon: '📊' },
+    { id: 'hybrid', name: 'Hybrid Sorts', icon: '🔄' }
+  ];
+
+  const filteredAlgorithms = selectedCategory === 'all' 
+    ? algorithms 
+    : algorithms.filter(alg => alg.category === selectedCategory);
+
   return (
-    <div className="home-container">
-      <h1>Sorting Algorithms Documentation</h1>
-      <p>
-        This page provides a comprehensive overview of various sorting algorithms, their complexities, and implementations in different programming languages.
-      </p>
+    <div className="visualization-wrapper">
+      <h1>🎯 Sorting Algorithms Visualizer</h1>
+      
+      {/* Hero Section */}
+      <div className="hero-section">
+        <div className="hero-content">
+          <h2>Master the Art of Sorting</h2>
+          <p>
+            Explore and visualize various sorting algorithms with interactive animations, 
+            real-time statistics, and detailed explanations. Perfect for learning, 
+            teaching, and understanding algorithmic concepts.
+          </p>
+          <div className="hero-stats">
+            <div className="stat-item">
+              <span className="stat-number">11</span>
+              <span className="stat-label">Algorithms</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">6</span>
+              <span className="stat-label">Categories</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">∞</span>
+              <span className="stat-label">Possibilities</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <h2>Overview of Algorithms</h2>
-      <table className="algorithm-table">
-        <thead>
-          <tr>
-            <th>Algorithm</th>
-            <th>Description</th>
-            <th>Time Complexity</th>
-            <th>Space Complexity</th>
-            <th>Python Code</th>
-            <th>Java Code</th>
-            <th>C Code</th>
-            <th>C++ Code</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Bubble Sort</td>
-            <td>Simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.</td>
-            <td>O(n²)</td>
-            <td>O(1)</td>
-            <td>
-              <pre>
-                {`def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n):
-        for j in range(0, n-i-1):
-            if arr[j] > arr[j+1]:
-                arr[j], arr[j+1] = arr[j+1], arr[j]
-    return arr`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++)
-        for (int j = 0; j < n-i-1; j++)
-            if (arr[j] > arr[j+1])
-                swap(arr[j], arr[j+1]);
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++)
-        for (int j = 0; j < n-i-1; j++)
-            if (arr[j] > arr[j+1])
-                swap(arr[j], arr[j+1]);
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++)
-        for (int j = 0; j < n-i-1; j++)
-            if (arr[j] > arr[j+1])
-                swap(arr[j], arr[j+1]);
-}`}
-              </pre>
-            </td>
-          </tr>
-          <tr>
-            <td>Selection Sort</td>
-            <td>Sorting algorithm that divides the input list into two parts: a sorted and an unsorted part. It repeatedly selects the smallest (or largest) element from the unsorted part and moves it to the sorted part.</td>
-            <td>O(n²)</td>
-            <td>O(1)</td>
-            <td>
-              <pre>
-                {`def selection_sort(arr):
-    for i in range(len(arr)):
-        min_idx = i
-        for j in range(i+1, len(arr)):
-            if arr[j] < arr[min_idx]:
-                min_idx = j
-        arr[i], arr[min_idx] = arr[min_idx], arr[i]
-    return arr`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void selectionSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++) {
-        int min_idx = i;
-        for (int j = i+1; j < n; j++)
-            if (arr[j] < arr[min_idx])
-                min_idx = j;
-        swap(arr[min_idx], arr[i]);
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void selectionSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++) {
-        int min_idx = i;
-        for (int j = i+1; j < n; j++)
-            if (arr[j] < arr[min_idx])
-                min_idx = j;
-        swap(arr[min_idx], arr[i]);
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void selectionSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++) {
-        int min_idx = i;
-        for (int j = i+1; j < n; j++)
-            if (arr[j] < arr[min_idx])
-                min_idx = j;
-        swap(arr[min_idx], arr[i]);
-    }
-}`}
-              </pre>
-            </td>
-          </tr>
-          <tr>
-            <td>Insertion Sort</td>
-            <td>Builds a sorted array one item at a time by comparing each new item to those already sorted and inserting it into the correct position.</td>
-            <td>O(n²)</td>
-            <td>O(1)</td>
-            <td>
-              <pre>
-                {`def insertion_sort(arr):
-    for i in range(1, len(arr)):
-        key = arr[i]
-        j = i - 1
-        while j >= 0 and key < arr[j]:
-            arr[j + 1] = arr[j]
-            j -= 1
-        arr[j + 1] = key
-    return arr`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void insertionSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j--;
-        }
-        arr[j + 1] = key;
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void insertionSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j--;
-        }
-        arr[j + 1] = key;
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void insertionSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j--;
-        }
-        arr[j + 1] = key;
-    }
-}`}
-              </pre>
-            </td>
-          </tr>
-          <tr>
-            <td>Merge Sort</td>
-            <td>Divide and conquer algorithm that divides the array into halves, sorts them, and then merges them back together.</td>
-            <td>O(n log n)</td>
-            <td>O(n)</td>
-            <td>
-              <pre>
-                {`def merge_sort(arr):
-    if len(arr) > 1:
-        mid = len(arr) // 2
-        L = arr[:mid]
-        R = arr[mid:]
+      {/* Category Filter */}
+      <div className="category-filter">
+        <h3>Filter by Category</h3>
+        <div className="category-buttons">
+          {categories.map(category => (
+            <button
+              key={category.id}
+              className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(category.id)}
+            >
+              <span className="category-icon">{category.icon}</span>
+              <span className="category-name">{category.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
-        merge_sort(L)
-        merge_sort(R)
+      {/* Algorithm Cards */}
+      <div className="algorithms-grid">
+        {filteredAlgorithms.map(algorithm => (
+          <div key={algorithm.id} className="algorithm-card">
+            <h3>
+              <span className="algorithm-icon">{algorithm.icon}</span>
+              {algorithm.name}
+            </h3>
+            <p>{algorithm.description}</p>
+            
+            <div className="complexity-section">
+              <h4>Time Complexity</h4>
+              <div className="complexity-grid">
+                <div className="complexity-item">
+                  <div className="complexity-label">Best</div>
+                  <div className="complexity-value">{algorithm.timeComplexity.best}</div>
+                </div>
+                <div className="complexity-item">
+                  <div className="complexity-label">Average</div>
+                  <div className="complexity-value">{algorithm.timeComplexity.average}</div>
+                </div>
+                <div className="complexity-item">
+                  <div className="complexity-label">Worst</div>
+                  <div className="complexity-value">{algorithm.timeComplexity.worst}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="algorithm-details">
+              <div className="details-section">
+                <h4>Properties</h4>
+                <ul>
+                  <li><strong>Space Complexity:</strong> {algorithm.spaceComplexity}</li>
+                  <li><strong>Stability:</strong> {algorithm.stability}</li>
+                  <li><strong>In-Place:</strong> {algorithm.inPlace}</li>
+                </ul>
+              </div>
+              
+              <div className="details-section">
+                <h4>Advantages</h4>
+                <ul>
+                  {algorithm.advantages.map((advantage, index) => (
+                    <li key={index}>{advantage}</li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="details-section">
+                <h4>Disadvantages</h4>
+                <ul>
+                  {algorithm.disadvantages.map((disadvantage, index) => (
+                    <li key={index}>{disadvantage}</li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="details-section">
+                <h4>Use Cases</h4>
+                <ul>
+                  {algorithm.useCases.map((useCase, index) => (
+                    <li key={index}>{useCase}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-        i = j = k = 0
-        while i < len(L) and j < len(R):
-            if L[i] < R[j]:
-                arr[k] = L[i]
-                i += 1
-            else:
-                arr[k] = R[j]
-                j += 1
-            k += 1
-
-        while i < len(L):
-            arr[k] = L[i]
-            i += 1
-            k += 1
-
-        while j < len(R):
-            arr[k] = R[j]
-            j += 1
-            k += 1
-    return arr`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void merge(int arr[], int l, int m, int r) {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
-    int L[n1], R[n2];
-
-    for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
-
-    i = 0; j = 0; k = l;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
-            i++;
-        } else {
-            arr[k] = R[j];
-            j++;
-        }
-        k++;
-    }
-
-    while (i < n1) {
-        arr[k] = L[i];
-        i++;
-        k++;
-    }
-
-    while (j < n2) {
-        arr[k] = R[j];
-        j++;
-        k++;
-    }
-}
-
-void mergeSort(int arr[], int l, int r) {
-    if (l < r) {
-        int m = l + (r - l) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void merge(int arr[], int l, int m, int r) {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
-    int L[n1], R[n2];
-
-    for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
-
-    i = 0; j = 0; k = l;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
-            i++;
-        } else {
-            arr[k] = R[j];
-            j++;
-        }
-        k++;
-    }
-
-    while (i < n1) {
-        arr[k] = L[i];
-        i++;
-        k++;
-    }
-
-    while (j < n2) {
-        arr[k] = R[j];
-        j++;
-        k++;
-    }
-}
-
-void mergeSort(int arr[], int l, int r) {
-    if (l < r) {
-        int m = l + (r - l) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void merge(int arr[], int l, int m, int r) {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
-    int L[n1], R[n2];
-
-    for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
-
-    i = 0; j = 0; k = l;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
-            i++;
-        } else {
-            arr[k] = R[j];
-            j++;
-        }
-        k++;
-    }
-
-    while (i < n1) {
-        arr[k] = L[i];
-        i++;
-        k++;
-    }
-
-    while (j < n2) {
-        arr[k] = R[j];
-        j++;
-        k++;
-    }
-}
-
-void mergeSort(int arr[], int l, int r) {
-    if (l < r) {
-        int m = l + (r - l) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
-    }
-}`}
-              </pre>
-            </td>
-          </tr>
-          <tr>
-            <td>Quick Sort</td>
-            <td>Divide and conquer algorithm that picks an element as a pivot and partitions the array around the pivot.</td>
-            <td>O(n log n) average, O(n²) worst</td>
-            <td>O(log n)</td>
-            <td>
-              <pre>
-                {`def quick_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    pivot = arr[len(arr) // 2]
-    left = [x for x in arr if x < pivot]
-    middle = [x for x in arr if x == pivot]
-    right = [x for x in arr if x > pivot]
-    return quick_sort(left) + middle + quick_sort(right)`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
-}
-
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            swap(arr[i], arr[j]);
-        }
-    }
-    swap(arr[i + 1], arr[high]);
-    return (i + 1);
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
-}
-
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            swap(arr[i], arr[j]);
-        }
-    }
-    swap(arr[i + 1], arr[high]);
-    return (i + 1);
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
-}
-
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            swap(arr[i], arr[j]);
-        }
-    }
-    swap(arr[i + 1], arr[high]);
-    return (i + 1);
-}`}
-              </pre>
-            </td>
-          </tr>
-          <tr>
-            <td>Heap Sort</td>
-            <td>Comparison-based sorting technique based on a binary heap data structure.</td>
-            <td>O(n log n)</td>
-            <td>O(1)</td>
-            <td>
-              <pre>
-                {`def heapify(arr, n, i):
-    largest = i
-    left = 2 * i + 1
-    right = 2 * i + 2
-
-    if left < n and arr[left] > arr[largest]:
-        largest = left
-
-    if right < n and arr[right] > arr[largest]:
-        largest = right
-
-    if largest != i:
-        arr[i], arr[largest] = arr[largest], arr[i]
-        heapify(arr, n, largest)
-
-def heap_sort(arr):
-    n = len(arr)
-    for i in range(n // 2 - 1, -1, -1):
-        heapify(arr, n, i)
-    for i in range(n - 1, 0, -1):
-        arr[i], arr[0] = arr[0], arr[i]
-        heapify(arr, i, 0)
-    return arr`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void heapify(int arr[], int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
-
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
-
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-        heapify(arr, n, largest);
-    }
-}
-
-void heapSort(int arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-    for (int i = n - 1; i > 0; i--) {
-        swap(arr[0], arr[i]);
-        heapify(arr, i, 0);
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void heapify(int arr[], int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
-
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
-
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-        heapify(arr, n, largest);
-    }
-}
-
-void heapSort(int arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-    for (int i = n - 1; i > 0; i--) {
-        swap(arr[0], arr[i]);
-        heapify(arr, i, 0);
-    }
-}`}
-              </pre>
-            </td>
-            <td>
-              <pre>
-                {`void heapify(int arr[], int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
-
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
-
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-        heapify(arr, n, largest);
-    }
-}
-
-void heapSort(int arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-    for (int i = n - 1; i > 0; i--) {
-        swap(arr[0], arr[i]);
-        heapify(arr, i, 0);
-    }
-}`}
-              </pre>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {/* Features Section */}
+      <div className="features-section">
+        <h2>✨ Features</h2>
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon">🎨</div>
+            <h3>Beautiful Visualizations</h3>
+            <p>Stunning animations with smooth transitions and color-coded elements.</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">📊</div>
+            <h3>Real-time Statistics</h3>
+            <p>Track comparisons, swaps, time elapsed, and iterations in real-time.</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">⚡</div>
+            <h3>Performance Optimized</h3>
+            <p>Lag-free animations with optimized rendering and smooth 60fps performance.</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">📱</div>
+            <h3>Responsive Design</h3>
+            <p>Works perfectly on desktop, tablet, and mobile devices.</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">🔧</div>
+            <h3>Customizable Controls</h3>
+            <p>Adjust array size, animation speed, and other parameters to your preference.</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">📚</div>
+            <h3>Educational Content</h3>
+            <p>Comprehensive explanations, code examples, and complexity analysis.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

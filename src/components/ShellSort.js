@@ -1,113 +1,82 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 const codeSnippets = {
-  javascript: `function mergeSort(arr) {
-  if (arr.length <= 1) return arr;
-  
-  const mid = Math.floor(arr.length / 2);
-  const left = mergeSort(arr.slice(0, mid));
-  const right = mergeSort(arr.slice(mid));
-  
-  return merge(left, right);
-}
-
-function merge(left, right) {
-  const result = [];
-  let i = 0, j = 0;
-  
-  while (i < left.length && j < right.length) {
-    if (left[i] < right[j]) {
-      result.push(left[i++]);
-    } else {
-      result.push(right[j++]);
+  javascript: `function shellSort(arr) {
+    const n = arr.length;
+    
+    // Start with a large gap and reduce it
+    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+      // Do insertion sort for elements at gap intervals
+      for (let i = gap; i < n; i++) {
+        const temp = arr[i];
+        let j;
+        
+        for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+          arr[j] = arr[j - gap];
+        }
+        arr[j] = temp;
+      }
     }
-  }
-  
-  return result.concat(left.slice(i)).concat(right.slice(j));
-}`,
-  python: `def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
     
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
+    return arr;
+  }`,
+  python: `def shell_sort(arr):
+    n = len(arr)
     
-    return merge(left, right)
-
-def merge(left, right):
-    result = []
-    i = j = 0
+    # Start with a large gap and reduce it
+    gap = n // 2
+    while gap > 0:
+        # Do insertion sort for elements at gap intervals
+        for i in range(gap, n):
+            temp = arr[i]
+            j = i
+            
+            while j >= gap and arr[j - gap] > temp:
+                arr[j] = arr[j - gap]
+                j -= gap
+            
+            arr[j] = temp
+        
+        gap //= 2
     
-    while i < len(left) and j < len(right):
-        if left[i] < right[j]:
-            result.append(left[i])
-            i += 1
-        else:
-            result.append(right[j])
-            j += 1
+    return arr`,
+  java: `public static void shellSort(int[] arr) {
+    int n = arr.length;
     
-    result.extend(left[i:])
-    result.extend(right[j:])
-    return result`,
-  java: `public static int[] mergeSort(int[] arr) {
-    if (arr.length <= 1) return arr;
-    
-    int mid = arr.length / 2;
-    int[] left = mergeSort(Arrays.copyOfRange(arr, 0, mid));
-    int[] right = mergeSort(Arrays.copyOfRange(arr, mid, arr.length));
-    
-    return merge(left, right);
-}
-
-public static int[] merge(int[] left, int[] right) {
-    int[] result = new int[left.length + right.length];
-    int i = 0, j = 0, k = 0;
-    
-    while (i < left.length && j < right.length) {
-        if (left[i] < right[j]) {
-            result[k++] = left[i++];
-        } else {
-            result[k++] = right[j++];
+    // Start with a large gap and reduce it
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // Do insertion sort for elements at gap intervals
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
         }
     }
-    
-    while (i < left.length) result[k++] = left[i++];
-    while (j < right.length) result[k++] = right[j++];
-    
-    return result;
 }`,
-  cpp: `void mergeSort(std::vector<int>& arr) {
-    if (arr.size() <= 1) return;
-    
-    int mid = arr.size() / 2;
-    std::vector<int> left(arr.begin(), arr.begin() + mid);
-    std::vector<int> right(arr.begin() + mid, arr.end());
-    
-    mergeSort(left);
-    mergeSort(right);
-    merge(arr, left, right);
-}
-
-void merge(std::vector<int>& arr, std::vector<int>& left, std::vector<int>& right) {
-    int i = 0, j = 0, k = 0;
-    
-    while (i < left.size() && j < right.size()) {
-        if (left[i] < right[j]) {
-            arr[k++] = left[i++];
-        } else {
-            arr[k++] = right[j++];
+  cpp: `void shellSort(int arr[], int n) {
+    // Start with a large gap and reduce it
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // Do insertion sort for elements at gap intervals
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i];
+            int j;
+            
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
         }
     }
-    
-    while (i < left.size()) arr[k++] = left[i++];
-    while (j < right.size()) arr[k++] = right[j++];
 }`
 };
 
-const genericDescription = `Merge Sort is a divide-and-conquer sorting algorithm that works by recursively dividing the array into two halves, sorting each half, and then merging the sorted halves to produce a final sorted array. It has a consistent time complexity of O(n log n) in all cases (best, average, and worst), making it one of the most efficient comparison-based sorting algorithms. Merge Sort is stable, meaning it preserves the relative order of equal elements.`;
+const genericDescription = `Shell Sort is an optimization of insertion sort that allows the exchange of items that are far apart. It works by comparing elements separated by a gap of several positions, which allows elements to move faster to their correct position. The gap starts large and is reduced until it becomes 1, at which point the algorithm becomes a regular insertion sort. Shell Sort has a time complexity that depends on the gap sequence used, typically ranging from O(n log n) to O(n²).`;
 
-const MergeSort = () => {
+const ShellSort = () => {
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(50);
   const [isSorting, setIsSorting] = useState(false);
@@ -120,7 +89,12 @@ const MergeSort = () => {
     timeElapsed: 0,
     iterations: 0
   });
-  const [currentIndices, setCurrentIndices] = useState({ left: -1, right: -1, merged: -1 });
+  const [currentIndices, setCurrentIndices] = useState({ 
+    gap: -1, 
+    i: -1, 
+    j: -1, 
+    temp: -1 
+  });
   const [sortingHistory, setSortingHistory] = useState([]);
   const stopRef = useRef(false);
   const pauseRef = useRef(false);
@@ -133,7 +107,7 @@ const MergeSort = () => {
     const newArray = Array.from({ length: arraySize }, () => Math.floor(Math.random() * 400) + 10);
     setArray(newArray);
     setStats({ comparisons: 0, swaps: 0, timeElapsed: 0, iterations: 0 });
-    setCurrentIndices({ left: -1, right: -1, merged: -1 });
+    setCurrentIndices({ gap: -1, i: -1, j: -1, temp: -1 });
     setSortingHistory([]);
     setIsPaused(false);
   }, [arraySize, isSorting]);
@@ -142,110 +116,81 @@ const MergeSort = () => {
     resetArray();
   }, [resetArray]);
 
-  const merge = async (left, right, startIndex) => {
-    const result = [];
-    let i = 0, j = 0;
-    let comparisons = 0;
-    let swaps = 0;
-
-    while (i < left.length && j < right.length) {
-      if (stopRef.current) break;
-      
-      // Check for pause
-      while (pauseRef.current && !stopRef.current) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      
-      comparisons++;
-      setCurrentIndices({ 
-        left: startIndex + i, 
-        right: startIndex + left.length + j, 
-        merged: startIndex + result.length 
-      });
-      setStats(prev => ({ ...prev, comparisons: prev.comparisons + 1 }));
-      
-      if (left[i] < right[j]) {
-        result.push(left[i]);
-        i++;
-      } else {
-        result.push(right[j]);
-        j++;
-      }
-      
-      swaps++;
-      setStats(prev => ({ ...prev, swaps: prev.swaps + 1 }));
-      
-      // Update the main array with the merged result
-      setArray(prevArray => {
-        const newArray = [...prevArray];
-        for (let k = 0; k < result.length; k++) {
-          newArray[startIndex + k] = result[k];
-        }
-        return newArray;
-      });
-      
-      // Save to history
-      setSortingHistory(prev => [...prev, {
-        array: [...array],
-        indices: { left: startIndex + i, right: startIndex + left.length + j, merged: startIndex + result.length },
-        stats: { ...stats, comparisons: stats.comparisons + 1, swaps: stats.swaps + 1 }
-      }]);
-      
-      await new Promise(resolve => {
-        animationRef.current = setTimeout(resolve, 1000 / speed);
-      });
-    }
-
-    // Add remaining elements
-    while (i < left.length) {
-      result.push(left[i++]);
-      swaps++;
-      setStats(prev => ({ ...prev, swaps: prev.swaps + 1 }));
-    }
-    
-    while (j < right.length) {
-      result.push(right[j++]);
-      swaps++;
-      setStats(prev => ({ ...prev, swaps: prev.swaps + 1 }));
-    }
-
-    return result;
-  };
-
-  const mergeSortRecursive = async (arr, startIndex = 0) => {
-    if (arr.length <= 1) return arr;
-    
-    const mid = Math.floor(arr.length / 2);
-    const left = await mergeSortRecursive(arr.slice(0, mid), startIndex);
-    const right = await mergeSortRecursive(arr.slice(mid), startIndex + mid);
-    
-    return await merge(left, right, startIndex);
-  };
-
-  const mergeSortAnimated = async () => {
+  const shellSortAnimated = async () => {
     setIsSorting(true);
     setIsPaused(false);
     stopRef.current = false;
     pauseRef.current = false;
+    const arr = [...array];
     const startTime = performance.now();
+    let comparisons = 0;
+    let swaps = 0;
     let iterations = 0;
+    const history = [];
+
+    const n = arr.length;
     
-    const sortedArray = await mergeSortRecursive(array);
-    
-    if (!stopRef.current) {
-      setArray(sortedArray);
-      iterations++;
-      setStats(prev => ({ ...prev, iterations }));
+    // Start with a large gap and reduce it
+    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+      if (stopRef.current) break;
+      
+      setCurrentIndices({ gap, i: -1, j: -1, temp: -1 });
+      
+      // Do insertion sort for elements at gap intervals
+      for (let i = gap; i < n; i++) {
+        if (stopRef.current) break;
+        
+        // Check for pause
+        while (pauseRef.current && !stopRef.current) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        const temp = arr[i];
+        let j;
+        setCurrentIndices({ gap, i, j: i, temp: i });
+        
+        for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+          if (stopRef.current) break;
+          
+          comparisons++;
+          swaps++;
+          setCurrentIndices({ gap, i, j, temp: i });
+          setStats(prev => ({ ...prev, comparisons, swaps, iterations }));
+          
+          arr[j] = arr[j - gap];
+          setArray([...arr]);
+          
+          // Save to history
+          history.push({
+            array: [...arr],
+            indices: { gap, i, j, temp: i },
+            stats: { comparisons, swaps, iterations }
+          });
+          
+          await new Promise(resolve => {
+            animationRef.current = setTimeout(resolve, 1000 / speed);
+          });
+        }
+        
+        arr[j] = temp;
+        setArray([...arr]);
+        iterations++;
+        setStats(prev => ({ ...prev, comparisons, swaps, iterations }));
+      }
     }
-    
+
     const endTime = performance.now();
     setStats(prev => ({ 
       ...prev, 
+      comparisons, 
+      swaps, 
+      iterations,
       timeElapsed: Math.round(endTime - startTime)
     }));
-    setCurrentIndices({ left: -1, right: -1, merged: -1 });
+    setCurrentIndices({ gap: -1, i: -1, j: -1, temp: -1 });
     setIsSorting(false);
     setIsPaused(false);
+    setSortingHistory(history);
   };
 
   const pauseSorting = () => {
@@ -269,7 +214,7 @@ const MergeSort = () => {
     setArray(sortedArray);
     setIsSorting(false);
     setIsPaused(false);
-    setCurrentIndices({ left: -1, right: -1, merged: -1 });
+    setCurrentIndices({ gap: -1, i: -1, j: -1, temp: -1 });
   };
 
   const stopSorting = () => {
@@ -280,7 +225,7 @@ const MergeSort = () => {
     }
     setIsSorting(false);
     setIsPaused(false);
-    setCurrentIndices({ left: -1, right: -1, merged: -1 });
+    setCurrentIndices({ gap: -1, i: -1, j: -1, temp: -1 });
   };
 
   const stepBack = () => {
@@ -302,13 +247,16 @@ const MergeSort = () => {
   };
 
   const getBarClass = (index) => {
-    if (currentIndices.left === index) {
+    if (currentIndices.temp === index) {
+      return 'array-bar pivot';
+    }
+    if (currentIndices.j === index) {
       return 'array-bar comparing';
     }
-    if (currentIndices.right === index) {
+    if (currentIndices.i === index) {
       return 'array-bar swapping';
     }
-    if (currentIndices.merged === index) {
+    if (index % currentIndices.gap === 0 && currentIndices.gap > 0) {
       return 'array-bar sorted';
     }
     return 'array-bar';
@@ -316,7 +264,7 @@ const MergeSort = () => {
 
   return (
     <div className="visualization-wrapper">
-      <h1>Merge Sort Visualizer</h1>
+      <h1>Shell Sort Visualizer</h1>
       
       {/* Stats Display */}
       <div className="stats-container">
@@ -389,7 +337,7 @@ const MergeSort = () => {
         </button>
         
         {!isSorting ? (
-          <button onClick={mergeSortAnimated} className="success">
+          <button onClick={shellSortAnimated} className="success">
             ▶️ Start Sort
           </button>
         ) : (
@@ -420,23 +368,24 @@ const MergeSort = () => {
 
       {/* Algorithm Description */}
       <div className="description">
-        <h3>Merge Sort Algorithm</h3>
+        <h3>Shell Sort Algorithm</h3>
         <p>{genericDescription}</p>
         
         <div style={{ marginTop: '20px' }}>
           <h4>How it works:</h4>
           <ul>
-            <li>Divide the array into two equal halves</li>
-            <li>Recursively sort the two halves</li>
-            <li>Merge the sorted halves into a single sorted array</li>
-            <li>Continue until the entire array is sorted</li>
+            <li>Start with a large gap (typically n/2)</li>
+            <li>Compare and swap elements separated by the gap</li>
+            <li>Reduce the gap (typically by dividing by 2)</li>
+            <li>Continue until gap becomes 1 (insertion sort)</li>
+            <li>This allows elements to move faster to their correct positions</li>
           </ul>
         </div>
       </div>
 
       {/* Code Section */}
       <div className="code-section">
-        <h2>Merge Sort Implementation</h2>
+        <h2>Shell Sort Implementation</h2>
         <p className="algorithm-description">{genericDescription}</p>
         <select
           value={codeLang}
@@ -470,20 +419,20 @@ const MergeSort = () => {
             <tr>
               <td>Best Case</td>
               <td>O(n log n)</td>
-              <td>O(n)</td>
-              <td>Always the same</td>
+              <td>O(1)</td>
+              <td>Array is already sorted</td>
             </tr>
             <tr>
               <td>Average Case</td>
-              <td>O(n log n)</td>
-              <td>O(n)</td>
-              <td>Always the same</td>
+              <td>O(n^1.3)</td>
+              <td>O(1)</td>
+              <td>Depends on gap sequence</td>
             </tr>
             <tr>
               <td>Worst Case</td>
-              <td>O(n log n)</td>
-              <td>O(n)</td>
-              <td>Always the same</td>
+              <td>O(n²)</td>
+              <td>O(1)</td>
+              <td>Poor gap sequence</td>
             </tr>
           </tbody>
         </table>
@@ -492,4 +441,4 @@ const MergeSort = () => {
   );
 };
 
-export default MergeSort;
+export default ShellSort; 
